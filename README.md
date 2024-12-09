@@ -53,3 +53,17 @@ customer_data['payment_method'] = customer_data['payment_method'].str.title()
 merged_data = pd.merge(sales_data, customer_data, on="customer_id", how="inner")
 merged_data['Revenue'] = merged_data['quantity'] * merged_data['price']
 merged_data.to_csv("data/cleaned_merged_data.csv", index=False)
+
+from statsmodels.tsa.arima.model import ARIMA
+
+# Aggregate daily revenue
+time_series = merged_data.groupby('invoice_date')['Revenue'].sum()
+
+# Fit ARIMA model
+model = ARIMA(time_series, order=(5, 1, 0))
+model_fit = model.fit()
+
+# Forecast
+forecast = model_fit.forecast(steps=30)
+forecast.to_csv('data/forecast.csv', index=True)
+
