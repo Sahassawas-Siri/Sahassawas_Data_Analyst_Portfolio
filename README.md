@@ -1,34 +1,55 @@
 # Retail Segmentation and Sales Forecasting
-This project analyzes sales and customer data for a retail company operating in shopping malls. The objective is to:
-1. Identify top-performing product categories and regions.
-2. Optimize customer segmentation for targeted marketing.
-3. Forecast future sales trends to improve resource planning.
----
+
+This project analyzes sales and customer data for a retail company to identify:
+1. Top-performing product categories and regions.
+2. Customer segmentation for targeted marketing.
+3. Seasonal sales trends and future revenue forecasts.
+
+## Key Objectives:
+- Clean and preprocess sales and customer data.
+- Analyze revenue trends using SQL.
+- Perform advanced analytics (clustering and forecasting) with Python.
+- Visualize insights with an interactive Power BI dashboard.
+
 ## Workflow Overview
-The project follows these steps:
 
-1. **Data Cleaning**: Clean raw sales and customer data to fix invalid and missing values.
-2. **SQL Analysis**: Use SQL queries to analyze revenue trends by category, region, and seasonality.
-3. **Advanced Analytics**: Perform customer segmentation and sales forecasting with Python.
-4. **Visualization**: Create an interactive Power BI dashboard for stakeholders.
----
-# Data Cleaning 
+1. **Data Cleaning**: Clean raw sales and customer data using Python.
+2. **SQL Analysis**: Extract insights on revenue trends by category, region, and seasonality.
+3. **Advanced Analytics**: Perform clustering for customer segmentation and forecast sales trends using Python.
+4. **Visualization**: Create an interactive Power BI dashboard to present findings.
 
-## Step 1: Load Data
+Each step is detailed below with code examples and outputs.
 
+### Step 1: Data Cleaning
+**Objective**: Clean and preprocess raw sales and customer data to handle missing values, invalid entries, and standardize formats.
+
+**Files Used**:
+- `dirty_sales_data_updated.csv`
+- `dirty_customer_data_updated.csv`
+
+**Code**:
+```python
 import pandas as pd
+
+# Load data
 sales_data = pd.read_csv("data/dirty_sales_data_updated.csv")
 customer_data = pd.read_csv("data/dirty_customer_data_updated.csv")
 
-print(sales_data.info())
-print(customer_data.info())
-
-## Step 2: Data Cleaning - Replace 'nan' in quantity with NaN
+# Replace 'nan' in quantity with NaN
 sales_data['quantity'] = sales_data['quantity'].replace('nan', pd.NA)
 sales_data['quantity'] = pd.to_numeric(sales_data['quantity'], errors='coerce')
 
-## Fill missing quantities with median
+# Fill missing quantities with median
 sales_data['quantity'].fillna(sales_data['quantity'].median(), inplace=True)
 
-## Standardize category names
+# Standardize category names
 sales_data['category'] = sales_data['category'].str.title().replace({'Food': 'Food & Beverage', 'Clothes': 'Clothing'})
+
+# Clean customer data
+customer_data['payment_method'] = customer_data['payment_method'].replace('Paypal', 'Unknown')
+customer_data['payment_method'] = customer_data['payment_method'].str.title()
+
+# Save cleaned data
+merged_data = pd.merge(sales_data, customer_data, on="customer_id", how="inner")
+merged_data['Revenue'] = merged_data['quantity'] * merged_data['price']
+merged_data.to_csv("data/cleaned_merged_data.csv", index=False)
