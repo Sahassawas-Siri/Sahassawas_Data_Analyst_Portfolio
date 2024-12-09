@@ -1,2 +1,6 @@
-# retail-sales-customer-analysis
-This project analyzes retail sales and customer data to identify top-performing product categories, optimize customer segmentation, and forecast future sales trends. The analysis focuses on providing actionable insights for better resource allocation, targeted marketing strategies, and improved business decision-making.
+# Retail Segmentation and Sales Forecasting
+This project analyzes sales and customer data for a retail company operating in shopping malls. The objective is to:
+1. Identify top-performing product categories and regions.
+2. Optimize customer segmentation for targeted marketing.
+3. Forecast future sales trends to improve resource planning.
+---
